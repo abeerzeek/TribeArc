@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TribeArc</title>
+    <script>
+      // Web3 Polyfills and Environment Safe Guards for Sandboxed Environments
+      (function() {
+        if (typeof window !== 'undefined') {
+          // 1. Define global object
+          window.global = window.global || window;
+          
+          // 2. Define process and process.env to prevent Object.keys(process.env) errors in client libraries
+          if (!window.process) {
+            window.process = { env: {} };
+          } else if (!window.process.env) {
+            window.process.env = {};
+          }
+
+          // 3. Workaround for sandboxed environments where window.fetch is a read-only getter.
+          // This allows library packages to safely override/monkeypatch window.fetch.
+          var defaultFetch = window.fetch;
+          var activeFetch = defaultFetch;
+          try {
+            Object.defineProperty(window, 'fetch', {
+              configurable: true,
+              enumerable: true,
+              get: function() {
+                return activeFetch;
+              },
+              set: function(v) {
+                activeFetch = v;
+              }
+            });
+          } catch (e) {
+            console.warn("TribeArc Environment Safe Guard: Failed to redefine window.fetch setter/getter", e);
+          }
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+

@@ -1,0 +1,6 @@
+{
+  "name": "TribeArc",
+  "description": "A stablecoin swap and faucet on Arc Testnet enabling swaps between USDC and EURC.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
